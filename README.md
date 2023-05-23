@@ -23,7 +23,7 @@ To build and install the function the following has to be done:
 CREATE FUNCTION
 ```
 
-## Test
+## Usage
 
 By this point, the sample function `pg_dijkstra_go` already has been installed and can now be run.
 
