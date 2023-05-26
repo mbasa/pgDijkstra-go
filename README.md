@@ -59,7 +59,7 @@ And the Graph Data in JSON Text format should contain the following data:
 Getting a Shortest Path:
 
 ```sql
-go=# select pg_dijkstra_go((select json_agg(graph)::text as graph from (select id,source,target,cost from pgrserver) graph),1209274,1844841);
+select pg_dijkstra_go((select json_agg(graph)::text as graph from (select id,source,target,cost from pgrserver) graph),1209274,1844841);
 
 ```
 
@@ -67,6 +67,6 @@ Inserting the results of the Shortest Path Search into a Table:
 
 
 ```sql
-go=# insert into dijkstra_result select id,geom from pgrserver where id = ANY(string_to_array((select pg_dijkstra_go((select json_agg(graph)::text as graph from (select id,source,target,cost from pgrserver) graph),1209274,1844841)),',')::int[]);
+insert into dijkstra_result select id,geom from pgrserver where id = ANY(string_to_array((select pg_dijkstra_go((select json_agg(graph)::text as graph from (select id,source,target,cost from pgrserver) graph),1209274,1844841)),',')::int[]);
 
 ```
