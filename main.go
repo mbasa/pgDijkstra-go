@@ -91,15 +91,15 @@ func dijkstraFindPath(graphArr []GraphType, sNode int, tNode int) string {
 	// Formatting the Output that containse the Edge IDs
 	//
 	pathLen := len(best.Path)
-	retVal := ""
+	retVal := "["
 
 	for i := 0; i < pathLen-2; i++ {
 		s := fmt.Sprintf("%d,%d", best.Path[i], best.Path[i+1])
-		retVal = retVal + fmt.Sprintf("%d,", edgeMap[s])
+		retVal = retVal + fmt.Sprintf("{\"edge_id\":%d},", edgeMap[s])
 	}
 
 	st := fmt.Sprintf("%d,%d", best.Path[pathLen-2], best.Path[pathLen-1])
-	retVal = retVal + fmt.Sprintf("%d", edgeMap[st])
+	retVal = retVal + fmt.Sprintf("{\"edge_id\":%d}]", edgeMap[st])
 
 	return retVal
 }

@@ -40,9 +40,7 @@ go=# \df pg_dijkstra_go
 The pg_dijkstra_go function takes 3 parameters:
 
 1. A **JSON Formatted Text** that contains the Graph Data.
-
 2. The **Source Node ID** of the requested Shortest Path.
-
 3. The **Target Node ID** of the requested Shortetest Path
 
 
@@ -56,17 +54,22 @@ And the Graph Data in JSON Text format should contain the following data:
 #### Examples
 
 
-Getting a Shortest Path:
+* Getting a Shortest Path that will return a Text containg the edge ids in `JSON format`:
 
 ```sql
 select pg_dijkstra_go((select json_agg(graph)::text as graph from (select id,source,target,cost from pgrserver) graph),1209274,1844841);
 
 ```
 
-Inserting the results of the Shortest Path Search into a Table:
+* Transforming the returned JSON Text into a `set of records`
+
+```sql
+select * from json_to_recordset( (select pg_dijkstra_go((select json_agg(graph)::text from (select id,source,target,cost from pgrserver) graph),1209274,749290)::json) ) as x (edge_id int) ;
+```
+
+* Inserting the results of the Shortest Path Search into a Table:
 
 
 ```sql
-insert into dijkstra_result select id,geom from pgrserver where id = ANY(string_to_array((select pg_dijkstra_go((select json_agg(graph)::text as graph from (select id,source,target,cost from pgrserver) graph),1209274,1844841)),',')::int[]);
-
+insert into dijkstra_result  select id,geom from pgrserver where id in (select edge_id from json_to_recordset( (select pg_dijkstra_go((select json_agg(graph)::text from (select id,source,target,cost from pgrserver) graph),1209274,749290)::json) ) as x (edge_id int));
 ```
